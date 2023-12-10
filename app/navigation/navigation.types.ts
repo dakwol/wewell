@@ -1,6 +1,7 @@
 import { ComponentType } from "react";
 
 export type TypeRootrStackParamList = {
+    Onboarding: undefined;
     Auth: undefined;
     Home: undefined;
     Profile: undefined;

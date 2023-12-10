@@ -8,7 +8,7 @@ import React, {
 	useEffect,
 	useState
 } from 'react'
-import type { IUser } from '../types/user.interface'
+import type { IUser } from '@/types/user.interface'
 
 export type TypeUser = IUser | null
 

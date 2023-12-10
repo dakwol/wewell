@@ -3,12 +3,14 @@ module.exports = function(api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      ['bable-plugin-root-import', 
+      'tailwind-rn',
+      ['babel-plugin-root-import', 
         {
           rootPathSuffix: 'app/',
           rootPathPrefix: '@/',
         }
-      ]
-      ,["nativewind/babel"]],
+      ],
+      ["nativewind/babel"],
+    ],
   };
 };

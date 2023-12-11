@@ -3,6 +3,9 @@ import Auth from "../components/screens/Auth/Auth";
 import Home from "../components/screens/Home/Home";
 import Profile from "../components/screens/Profile/Profile";
 import { IRoute } from "./navigation.types";
+import AuthSms from "@/components/screens/AuthSMS/AuthSMS";
+import AuthName from "@/components/screens/AuthName/AuthName";
+import AuthCategory from "@/components/screens/AuthCategory/AuthCategory";
 
 export const routes: IRoute[] = [
     {
@@ -12,6 +15,18 @@ export const routes: IRoute[] = [
     {
         name: "Auth",
         component: Auth
+    },
+    {
+        name: "AuthSms",
+        component: AuthSms
+    },
+    {
+        name: "AuthName",
+        component: AuthName
+    },
+    {
+        name: "AuthCategory",
+        component: AuthCategory
     },
     {
         name: "Home",

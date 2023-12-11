@@ -1,10 +1,14 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { View, Image, Text, Button, TouchableOpacity } from 'react-native'
 import Swiper from 'react-native-swiper'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native'
 
 const Onboarding: FC = () => {
 	const swiperRef = useRef(null)
 	const [currentIndex, setCurrentIndex] = useState(0)
+	const [onboardingShown, setOnboardingShown] = useState(false)
+	const navigation = useNavigation()
 	const dataSlide = [
 		{
 			id: 1,
@@ -32,12 +36,50 @@ const Onboarding: FC = () => {
 		}
 	]
 
+	useEffect(() => {
+		const checkOnboardingStatus = async () => {
+			try {
+				const value = await AsyncStorage.getItem('@onboarding_shown')
+				if (value !== null) {
+					// Onboarding has been shown before
+					setOnboardingShown(true)
+
+					//@ts-ignore
+					navigation.navigate('Auth')
+				}
+			} catch (error) {
+				console.error('Error reading onboarding status:', error)
+			}
+		}
+
+		checkOnboardingStatus()
+	}, [])
+
+	const saveOnboardingStatus = async () => {
+		try {
+			await AsyncStorage.setItem('@onboarding_shown', 'true')
+			setOnboardingShown(true)
+
+			//@ts-ignore
+			navigation.navigate('Auth')
+		} catch (error) {
+			console.error('Error saving onboarding status:', error)
+		}
+	}
+
 	const handleNext = () => {
-		if (swiperRef.current) {
+		if (currentIndex < dataSlide.length - 1) {
 			//@ts-ignore
 			swiperRef.current.scrollBy(1)
 		} else {
+			saveOnboardingStatus()
+			//@ts-ignore
+			navigation.navigate('Auth')
 		}
+	}
+
+	if (onboardingShown) {
+		return null // Return null or navigate to the next screen if onboarding has been shown
 	}
 
 	return (
@@ -59,6 +101,7 @@ const Onboarding: FC = () => {
 				paginationStyle={{ display: 'none' }}
 				onIndexChanged={index => setCurrentIndex(index)}
 				ref={swiperRef}
+				loop={false}
 			>
 				{dataSlide.map((item, index) => (
 					<View key={index} className='flex-1 h-screen p-6 relative'>

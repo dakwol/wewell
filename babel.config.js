@@ -3,7 +3,7 @@ module.exports = function(api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      'tailwind-rn',
+      // 'tailwind-rn',
       ['babel-plugin-root-import', 
         {
           rootPathSuffix: 'app/',

@@ -6,6 +6,7 @@ import {
 import { FC, useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import PrivateNavigation from './PrivateNavigation'
+import React from 'react'
 
 const Navigation: FC = () => {
 	const { user } = useAuth()

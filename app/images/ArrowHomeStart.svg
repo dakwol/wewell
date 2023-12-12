@@ -1,0 +1,36 @@
+<svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 382.16 1629.52"
+    width="382.1600036621094" height="1629.52001953125">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: none;
+                stroke: #0038ff;
+                stroke-miterlimit: 10;
+                stroke-width: 3px;
+                stroke-dasharray: 2015.04;
+                stroke-dashoffset: 2015.04;
+                animation: drawPath 2s forwards cubic-bezier(0.47, 0, 0.745, 0.715);
+            }
+
+            .cls-2 {
+                fill: #0038ff;
+            }
+
+            @keyframes drawPath {
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+        </style>
+    </defs>
+    <path class="cls-1 svg-elem-1"
+        d="M605.5,405.5s70,26.35,36,283.67-83,643.33-80,731.33,6.75,181.19,32,238c28,63,54,109,127,126s83,7,97,21,8,31-28,58-282,148-339,166"
+        transform="translate(-443.81 -403.62)"></path>
+    <polyline class="cls-1 svg-elem-2" points="40.69 1589.88 3.69 1627.88 57.36 1625.88"></polyline>
+    <rect class="cls-2 svg-elem-3" x="603.56" y="403.28" width="3.01" height="4.09" rx="1.5"
+        transform="translate(-438.16 415.34) rotate(-68.43)"></rect>
+    <rect class="cls-2 svg-elem-4" x="481.26" y="1990.69" width="3" height="9.18" rx="1.5"
+        transform="translate(1087.89 -172.97) rotate(44.33)"></rect>
+    <rect class="cls-2 svg-elem-5" x="497.5" y="2025.56" width="3" height="8.03" rx="1.5"
+        transform="translate(2064.73 1051.56) rotate(87.86)"></rect>
+</svg>

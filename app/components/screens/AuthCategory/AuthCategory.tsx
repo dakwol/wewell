@@ -1,8 +1,10 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { FC, useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 
 const AuthCategory: FC = () => {
 	const [activeButtons, setActiveButtons] = useState<number[]>([])
+	const navigation = useNavigation()
 
 	const dataButton = [
 		{ id: 1, text: 'Text' },
@@ -25,6 +27,11 @@ const AuthCategory: FC = () => {
 		})
 	}
 
+	const navigationAuth = () => {
+		//@ts-ignore
+		navigation.navigate('Home')
+	}
+
 	return (
 		<View className='flex-1 justify-between content-center p-6'>
 			<View className='w-full mt-11'>
@@ -36,7 +43,15 @@ const AuthCategory: FC = () => {
 				</Text>
 			</View>
 
-			<View className='flex justify-center gap-3 mb-20'>
+			<View
+				style={{
+					justifyContent: 'center',
+					alignItems: 'center',
+					flexDirection: 'row',
+					flexWrap: 'wrap',
+					gap: 8
+				}}
+			>
 				{dataButton?.map(item => (
 					<TouchableOpacity
 						key={item.id}
@@ -46,9 +61,9 @@ const AuthCategory: FC = () => {
 						}`}
 					>
 						<Text
-							className={`text-${
-								activeButtons.includes(item.id) ? 'blue-700' : 'gray-500'
-							}`}
+							style={{
+								color: activeButtons.includes(item.id) ? '#0038FF' : '#9F9F9F'
+							}}
 						>
 							{item.text}
 						</Text>
@@ -56,7 +71,12 @@ const AuthCategory: FC = () => {
 				))}
 			</View>
 
-			<TouchableOpacity className='p-3 bg-blue-700 rounded-3xl w-full'>
+			<TouchableOpacity
+				className='p-3 bg-blue-700 rounded-3xl w-full'
+				onPress={() => {
+					navigationAuth()
+				}}
+			>
 				<Text className='color-white text-center'>Готово</Text>
 			</TouchableOpacity>
 		</View>

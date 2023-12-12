@@ -83,8 +83,8 @@ const Onboarding: FC = () => {
 	}
 
 	return (
-		<View className='flex-1'>
-			<View className='absolute top-0, w-screen z-50 justify-between flex-row'>
+		<View className='flex-1 h-screen'>
+			<View className='absolute top-12 w-screen z-50 justify-between flex-row'>
 				{dataSlide.map((_, index) => (
 					<View
 						key={index}
@@ -104,10 +104,14 @@ const Onboarding: FC = () => {
 				loop={false}
 			>
 				{dataSlide.map((item, index) => (
-					<View key={index} className='flex-1 h-screen p-6 relative'>
+					<View
+						key={index}
+						className='flex-1 h-screen relative'
+						style={{ paddingHorizontal: 16 }}
+					>
 						<Image
 							source={item.image}
-							className='top-0 h-screen absolute w-screen -z-40'
+							className='top-0 h-full absolute w-screen -z-40'
 						/>
 						<View className='flex-1 flex-col justify-end mb-28'>
 							<Text className='color-white font-bold text-2xl'>
@@ -118,7 +122,7 @@ const Onboarding: FC = () => {
 					</View>
 				))}
 			</Swiper>
-			<View className='p-6 absolute bottom-12 w-screen'>
+			<View className='p-6 absolute bottom-6 w-screen'>
 				<TouchableOpacity
 					className='p-3 bg-blue-700 rounded-3xl  w-full'
 					onPress={handleNext}

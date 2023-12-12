@@ -18,7 +18,7 @@ const HomeFirsScreen: FC = () => {
 				<Image
 					style={{
 						width: 140,
-						height: 420,
+						height: 520,
 						marginRight: 30,
 						resizeMode: 'contain'
 					}}

@@ -17,7 +17,7 @@ const HomeScreenHistoryComponent: FC<HomeScreenHistoryComponentProps> = ({
 	scrollY
 }) => {
 	return (
-		<View className='flex flex-wrap flex-row'>
+		<View className='flex flex-wrap flex-row p-4 justify-start'>
 			{data.map((item, index) => {
 				// const avatarSize = scrollY.interpolate({
 				// 	inputRange: [(index - 1) * 70, index * 70],
@@ -26,10 +26,11 @@ const HomeScreenHistoryComponent: FC<HomeScreenHistoryComponentProps> = ({
 				// })
 
 				return (
-					<View key={item.id} className='w-1/3 p-2'>
+					<View key={item.id} className='w-1/3 p-2 items-center'>
 						<Animated.Image
 							source={item.image}
-							style={{ width: 50, height: 50 }}
+							style={{ width: 80, height: 80 }}
+							className={''}
 						/>
 						<Text className='text-center mt-2'>{item.name}</Text>
 					</View>

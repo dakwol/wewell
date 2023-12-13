@@ -31,6 +31,7 @@ const Auth: FC = () => {
 		if (dataPress.phone != undefined) {
 			//@ts-ignore
 			navigation.navigate('AuthSms', { phone: dataPress.phone })
+		} else {
 		}
 	}
 	return (

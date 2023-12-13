@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Text, View, Image, Animated } from 'react-native'
+import { Text, View, Image, Animated, TouchableOpacity } from 'react-native'
 
 interface HistoryItem {
 	id: number
@@ -26,14 +26,14 @@ const HomeScreenHistoryComponent: FC<HomeScreenHistoryComponentProps> = ({
 				// })
 
 				return (
-					<View key={item.id} className='w-1/3 p-2 items-center'>
+					<TouchableOpacity key={item.id} className='w-1/3 p-2 items-center'>
 						<Animated.Image
 							source={item.image}
 							style={{ width: 80, height: 80 }}
 							className={''}
 						/>
 						<Text className='text-center mt-2'>{item.name}</Text>
-					</View>
+					</TouchableOpacity>
 				)
 			})}
 		</View>

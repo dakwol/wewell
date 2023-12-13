@@ -1,16 +1,37 @@
+import {
+	clearDatapress,
+	setDatapress
+} from '@/store/reducers/dataPressItem/dataPressItemReducer'
 import { useNavigation } from '@react-navigation/native'
 import React, { FC } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { TextInputMask } from 'react-native-masked-text'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Auth: FC = () => {
-	console.log('====================================')
-	console.log('Auth')
-	console.log('====================================')
 	const navigation = useNavigation()
+	const dispatch = useDispatch()
+
+	//@ts-ignore
+	const dataPress = useSelector(state => state.dataPress.dataPress)
+	//@ts-ignore
+	const authPress = useSelector(state => state.authPress.authPress)
+
+	const handleSetDatapress = (key: string, value: string) => {
+		dispatch(setDatapress({ fieldName: key, fieldValue: value }))
+	}
+
+	console.log(dataPress)
+	console.log(authPress)
+
+	const handleClearDatapress = () => {
+		dispatch(clearDatapress())
+	}
 	const checkPhone = () => {
-		//@ts-ignore
-		navigation.navigate('AuthSms', { phone: '333333333' })
+		if (dataPress.phone != undefined) {
+			//@ts-ignore
+			navigation.navigate('AuthSms', { phone: dataPress.phone })
+		}
 	}
 	return (
 		<View className='flex-1 justify-between content-center p-6'>
@@ -29,7 +50,9 @@ const Auth: FC = () => {
 				}}
 				keyboardType='phone-pad'
 				placeholder='Номер телефона'
-				onChangeText={text => {}}
+				onChangeText={text => {
+					handleSetDatapress('phone', text)
+				}}
 				className='w-full text-center bg-gray-200 h-11 rounded-lg font-bold text-2xl mb-20'
 			/>
 			<TouchableOpacity

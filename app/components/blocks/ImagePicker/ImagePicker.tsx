@@ -1,5 +1,3 @@
-// ImagePickerExample.tsx
-
 import React, { FC, useState, useEffect } from 'react'
 import { View, Button, Image } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
@@ -7,13 +5,15 @@ import * as ImagePicker from 'expo-image-picker'
 interface ImagePickerExampleProps {
 	isVisible: boolean
 	onClose: () => void
+	onImagePick: (imageUri: string) => void // Callback function to handle image pick
 }
 
 const ImagePickerExample: FC<ImagePickerExampleProps> = ({
 	isVisible,
-	onClose
+	onClose,
+	onImagePick
 }) => {
-	const [selectedImage, setSelectedImage] = useState(null)
+	const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
 	useEffect(() => {
 		;(async () => {
@@ -35,12 +35,14 @@ const ImagePickerExample: FC<ImagePickerExampleProps> = ({
 		if (!result.canceled) {
 			//@ts-ignore
 			setSelectedImage(result.uri)
+			//@ts-ignore
+			onImagePick(result.uri) // Notify the parent component about the selected image
 		}
 	}
 
 	useEffect(() => {
 		if (isVisible) {
-			pickImage() // Вызываем pickImage сразу при отображении ImagePicker
+			pickImage() // Call pickImage when the component is visible
 		}
 	}, [isVisible])
 
@@ -48,7 +50,7 @@ const ImagePickerExample: FC<ImagePickerExampleProps> = ({
 		if (selectedImage) {
 			onClose()
 		}
-	}, [selectedImage, onClose])
+	}, [selectedImage])
 
 	return (
 		<View
@@ -58,14 +60,7 @@ const ImagePickerExample: FC<ImagePickerExampleProps> = ({
 				justifyContent: 'center',
 				display: isVisible ? 'flex' : 'none'
 			}}
-		>
-			{selectedImage && (
-				<Image
-					source={{ uri: selectedImage }}
-					style={{ width: 200, height: 200 }}
-				/>
-			)}
-		</View>
+		></View>
 	)
 }
 

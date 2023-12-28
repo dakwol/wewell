@@ -3,7 +3,9 @@ import queryString from 'query-string';
 
 import apiConfig from './apiConfig';
 import { useDispatch } from 'react-redux';
-import { AuthActionCreators } from '../store/reducers/auth/action-creator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '@/hooks/useAuth';
+// import { AuthActionCreators } from '../store/reducers/auth/action-creator';
 
 const axiosClient = axios.create({
   baseURL: apiConfig.baseUrl,
@@ -14,15 +16,21 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
-  const access = localStorage.getItem('access');
-  
-  if (access) {
-    config.headers['Authorization'] = `Bearer ${access}`;
+
+  if (config.data instanceof FormData) {
+    config.headers['Content-Type'] = 'multipart/form-data';
+  }
+
+  const userJsonString  = await AsyncStorage.getItem('user'); // AsyncStorage is used for storage in React Native
+
+  if (userJsonString) {
+    const user = JSON.parse(userJsonString || '');
+    
+    config.headers['Authorization'] = `Bearer ${user.token}`;
   }
   
   return config;
 });
-
 axiosClient.interceptors.response.use(
   (response) => {
     console.log('Response received:', response);
@@ -31,17 +39,54 @@ axiosClient.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
+  async (error) => {
     console.log('Error occurred:', error);
 
     if (error.response) {
       if (error.response.status === 401) {
         console.log('Handling error 401');
+     
+        const userJsonString  = await AsyncStorage.getItem('user'); // AsyncStorage is used for storage in React Native
+
+        if (userJsonString) {
+          const user = JSON.parse(userJsonString || '');
+          const tokenData = {
+            accessToken: user.token,
+            refreshToken: user.refreshToken,
+          };
+
+      
+         
+          const refreshedTokenResponse = await axios.post(
+            `${apiConfig.baseUrl}tokens/refresh`,
+            tokenData
+          );
+          console.log('refreshedTokenResponse', refreshedTokenResponse);
+         
+            
+
+          if (refreshedTokenResponse.data && refreshedTokenResponse.data.token) {
+            // Update userToken in AsyncStorage and Axios headers
+            const newAccessToken = refreshedTokenResponse.data.token;
+            const newAccessUser = { ...user, token: newAccessToken };
         
-        const dispatch = useDispatch();
-        const username = localStorage.getItem('user');
-        //@ts-ignore
-        dispatch(AuthActionCreators.login(username && username.email, username.password));
+            await AsyncStorage.setItem('user', JSON.stringify(newAccessUser));
+            axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+        
+            // Retry the original request
+            return axios.request(error.config);
+          } else {
+            console.error('Error refreshing token.');
+          }
+        }
+   
+        
+        // const dispatch = useDispatch();
+        // const username = await AsyncStorage.getItem('user');
+        // Dispatch your authentication action here
+        
+        // Example: 
+        // dispatch(AuthActionCreators.login(username && JSON.parse(username).email, JSON.parse(username).password));
       } else {
         throw error;
       }

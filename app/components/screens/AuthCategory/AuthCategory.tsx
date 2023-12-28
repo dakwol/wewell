@@ -1,35 +1,71 @@
+import PreferencesApiRequest from '@/api/Preferences/Preferences'
+import UserApiRequest from '@/api/User/Users'
+import { updateField } from '@/redux/actions/userActions'
 import { useNavigation } from '@react-navigation/native'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+
+interface iDataPreferences {
+	id: number
+	name: number | string
+}
 
 const AuthCategory: FC = () => {
 	const [activeButtons, setActiveButtons] = useState<number[]>([])
 	const navigation = useNavigation()
+	const userApi = new UserApiRequest()
+	const [dataButton, setDataButton] = useState<iDataPreferences[]>([])
+	const userData = useSelector((state: any) => state.user)
+	const preferncesApi = new PreferencesApiRequest()
 
-	const dataButton = [
-		{ id: 1, text: 'Text' },
-		{ id: 2, text: 'Text' },
-		{ id: 3, text: 'Text' },
-		{ id: 4, text: 'Text' },
-		{ id: 5, text: 'Text' },
-		{ id: 6, text: 'Text' }
-	]
+	const dispatch = useDispatch()
 
-	const handleButtonPress = (id: number) => {
+	console.log('====================================')
+	console.log('userData', userData)
+	console.log('====================================')
+	useEffect(() => {
+		const lastButtonAll = {
+			id: 0,
+			name: 'Я готов ко всему!'
+		}
+
+		preferncesApi.list().then(resp => {
+			if (resp.success) {
+				//@ts-ignore
+				setDataButton([...resp.data, lastButtonAll])
+			}
+		})
+	}, [])
+
+	const handleButtonPress = (data: iDataPreferences) => {
+		//@ts-ignore
 		setActiveButtons(prevActiveButtons => {
-			if (prevActiveButtons.includes(id)) {
-				// Button is already active, remove it from the array
-				return prevActiveButtons.filter(buttonId => buttonId !== id)
+			let updatedButtons
+			//@ts-ignore
+			if (prevActiveButtons.some(button => button.id === data.id)) {
+				updatedButtons = prevActiveButtons.filter(
+					//@ts-ignore
+					button => button.id !== data.id
+				)
 			} else {
 				// Button is not active, add it to the array
-				return [...prevActiveButtons, id]
+				updatedButtons = [...prevActiveButtons, data]
 			}
+
+			// Dispatch the entire array of active buttons
+			dispatch(updateField('preferences', updatedButtons))
+
+			return updatedButtons
 		})
 	}
 
 	const navigationAuth = () => {
-		//@ts-ignore
-		navigation.navigate('Home')
+		userApi.register(userData).then(resp => {
+			console.log(resp)
+		})
+		// //@ts-ignore
+		// navigation.navigate('Home')
 	}
 
 	return (
@@ -55,17 +91,23 @@ const AuthCategory: FC = () => {
 				{dataButton?.map(item => (
 					<TouchableOpacity
 						key={item.id}
-						onPress={() => handleButtonPress(item.id)}
+						onPress={() => handleButtonPress(item)}
 						className={`pt-1 pb-1 pr-6 pl-6 rounded-3xl border border-gray-200 bg-gray-200 text-center justify-center ${
-							activeButtons.includes(item.id) ? 'border-blue-700' : ''
+							//@ts-ignore
+							activeButtons.some(button => button.id === item.id)
+								? 'border-blue-700'
+								: ''
 						}`}
 					>
 						<Text
 							style={{
-								color: activeButtons.includes(item.id) ? '#0038FF' : '#9F9F9F'
+								//@ts-ignore
+								color: activeButtons.some(button => button.id === item.id)
+									? '#0038FF'
+									: '#9F9F9F'
 							}}
 						>
-							{item.text}
+							{item.name}
 						</Text>
 					</TouchableOpacity>
 				))}

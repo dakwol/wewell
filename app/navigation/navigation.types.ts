@@ -7,6 +7,7 @@ export type TypeRootrStackParamList = {
     AuthName: undefined;
     AuthCategory: undefined;
     Home: undefined;
+    Invite: undefined;
     Profile: undefined;
 }
 

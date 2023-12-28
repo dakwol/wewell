@@ -34,22 +34,28 @@ const AuthSms: FC = () => {
 		useRef<TextInput>(null)
 	]
 
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setTimer(prevTimer => (prevTimer > 0 ? prevTimer - 1 : 0))
-		}, 1000)
-		return () => clearInterval(intervalId)
-	}, [])
+	// useEffect(() => {
+	// 	const intervalId = setInterval(() => {
+	// 		setTimer(prevTimer => (prevTimer > 0 ? prevTimer - 1 : 0))
+	// 	}, 1000)
+	// 	return () => clearInterval(intervalId)
+	// }, [])
 
-	const codeRequest = () => {
-		setTimer(60)
-	}
+	// const codeRequest = () => {
+	// 	setTimer(60)
+	// }
+
+	useEffect(() => {
+		// get
+	}, [])
 
 	const navigation = useNavigation()
 	const checkCode = () => {
 		//@ts-ignore
 		navigation.navigate('AuthName')
 	}
+
+	console.log(phone)
 
 	return (
 		<View className='flex-1 justify-between content-center p-6'>
@@ -84,7 +90,7 @@ const AuthSms: FC = () => {
 				) : (
 					<TouchableOpacity
 						onPress={() => {
-							codeRequest()
+							// codeRequest()
 						}}
 					>
 						<Text className='color-white text-center text-base mb-3 text-gray-400'>

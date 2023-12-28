@@ -9,13 +9,17 @@ const Stack = createNativeStackNavigator<TypeRootrStackParamList>()
 
 const PrivateNavigation: FC = () => {
 	const { user } = useAuth()
+
+	const initialRouteName = user.token ? 'Home' : 'Auth'
+
 	return (
-		<Stack.Navigator screenOptions={{ headerTitle: '', headerShown: false }}>
-			{user ? (
-				routes.map(route => <Stack.Screen key={route.name} {...route} />)
-			) : (
-				<Stack.Screen name='Auth' component={Auth} />
-			)}
+		<Stack.Navigator
+			initialRouteName={initialRouteName}
+			screenOptions={{ headerTitle: '', headerShown: false }}
+		>
+			{routes.map(route => (
+				<Stack.Screen key={route.name} {...route} />
+			))}
 		</Stack.Navigator>
 	)
 }

@@ -43,14 +43,17 @@ class BaseModelAPI {
 
     protected async makeRequest<T>(requestFn: (url: string, config?: any) => Promise<AxiosResponse<T>>, params?: BaseModelAPIParams): Promise<APIResponse<T>> {
         const { method, id, urlParams, body } = { ...this.defaultParams, ...params };
-   
+        console.log('resp',this.baseUrl + id + method + urlParams, body);
         try {
             const resp = await requestFn(this.baseUrl + id + method + urlParams, body);
+     
       
             return this.returnResponse(resp);
         } catch (error) {
+             
             //@ts-ignore
             return { success: false, data: error, message: error.message || 'Unknown error' };
+         
         }
     }
 

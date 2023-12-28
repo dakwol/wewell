@@ -1,6 +1,7 @@
 import Onboarding from "@/components/screens/Onboarding/Onboarding";
 import Auth from "../components/screens/Auth/Auth";
 import Home from "../components/screens/Home/Home";
+import Invite from "../components/screens/Invite/Invite";
 import Profile from "../components/screens/Profile/Profile";
 import { IRoute } from "./navigation.types";
 import AuthSms from "@/components/screens/AuthSMS/AuthSMS";
@@ -31,6 +32,10 @@ export const routes: IRoute[] = [
     {
         name: "Home",
         component: Home
+    },
+    {
+        name: "Invite",
+        component: Invite
     },
     {
         name: "Profile",

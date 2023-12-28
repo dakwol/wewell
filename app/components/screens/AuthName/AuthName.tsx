@@ -1,6 +1,8 @@
+import { updateField } from '@/redux/actions/userActions'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { FC, useState, useRef, useEffect } from 'react'
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 //@ts-ignore
 type AuthSmsRouteProp = RouteProp<RootStackParamList, 'AuthName'>
@@ -9,9 +11,18 @@ const AuthName: FC = () => {
 	const route = useRoute<AuthSmsRouteProp>()
 	// const { phone } = route.params
 	const navigation = useNavigation()
+	const dispatch = useDispatch()
+
+	const userName = useSelector((state: any) => state.user.name)
+
+	const handleFieldChange = (key: string, value: string) => {
+		dispatch(updateField(key, value))
+	}
 	const checkName = () => {
-		//@ts-ignore
-		navigation.navigate('AuthCategory')
+		if (userName != '') {
+			//@ts-ignore
+			navigation.navigate('AuthCategory')
+		}
 	}
 	return (
 		<View className='flex-1 justify-between content-center p-6'>
@@ -23,7 +34,10 @@ const AuthName: FC = () => {
 			<View className='flex-row justify-center mb-20'>
 				<TextInput
 					className='w-full h-11 bg-gray-200 text-center rounded-lg font-bold text-2xl'
-					onChangeText={value => {}}
+					onChangeText={value => {
+						handleFieldChange('name', value)
+					}}
+					placeholder='Имя'
 				/>
 			</View>
 

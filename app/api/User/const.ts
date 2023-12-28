@@ -4,7 +4,8 @@ export const API_TOKEN_MODEL = {
     methods: {
         login:{
             url: 'login/'
-        }
+        },
+      
     },
 }
 export const API_USER_MODEL = {
@@ -13,6 +14,15 @@ export const API_USER_MODEL = {
     methods: {
         login:{
             url: 'login/'
+        },
+        register:{
+            url: 'register/'
+        },
+        avatars:{
+            url: 'avatars/'
+        },
+        getSms:{
+            url: 'phone/'
         }
     },
 }

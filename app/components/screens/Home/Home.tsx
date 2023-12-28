@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { View, Text, TouchableOpacity, Animated } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -7,12 +7,20 @@ import ContactPicker, {
 } from '@/components/blocks/ContactPicker/ContactPicker'
 import HomeFirsScreen from '@/components/blocks/homeFirsScreen/homeFirsScreen'
 import HomeScreenHistoryComponent from '@/components/blocks/homeScreenHistoryComponent/HomeScreenHistoryComponent'
+import { useAuth } from '@/hooks/useAuth'
+import MeetingApiRequest from '@/api/Meeting/Meeting'
 
 const Home: FC = () => {
 	const scrollY = useRef(new Animated.Value(0)).current
 	const contactPickerRef = useRef<ContactPickerRef>(null)
 
+	const meetingApi = new MeetingApiRequest()
+
+	const { user } = useAuth()
+
 	const [showContactPicker, setShowContactPicker] = useState(false) // Manage the visibility of the ContactPicker
+
+	const [dataHistory, setDataHistory] = useState([])
 
 	const avatarSize = scrollY.interpolate({
 		inputRange: [0, 150],
@@ -35,13 +43,27 @@ const Home: FC = () => {
 		setShowContactPicker(!showContactPicker)
 	}
 
-	const dataHistory = [
-		{
-			id: 1,
-			name: 'ХУЙ',
-			image: require('../../../images/AvatarUser1.png')
-		}
-	]
+	// const dataHistory = [
+	// 	{
+	// 		id: 1,
+	// 		name: 'ХУЙ',
+	// 		image: require('../../../images/AvatarUser1.png')
+	// 	}
+	// ]
+
+	console.log('====================================')
+	console.log(dataHistory)
+	console.log('====================================')
+
+	useEffect(() => {
+		meetingApi.getMeetingsUser(user.user.id).then(resp => {
+			console.log('meet', resp)
+			if (resp.success) {
+				//@ts-ignore
+				setDataHistory(resp.data)
+			}
+		})
+	}, [])
 
 	return (
 		<View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -68,10 +90,15 @@ const Home: FC = () => {
 						}}
 					>
 						<Animated.Image
-							source={require('../../../images/AvatarUser1.png')}
+							source={
+								user?.user?.url
+									? { uri: user?.user?.url }
+									: require('../../../images/AvatarUser1.png')
+							}
 							style={{ width: avatarSize, height: avatarSize }}
+							className={'rounded-full'}
 						/>
-						<Text style={{ marginTop: 2 }}>User</Text>
+						<Text style={{ marginTop: 2 }}>{user?.user?.name}</Text>
 					</TouchableOpacity>
 				</Animated.View>
 				{dataHistory.length != 0 ? (

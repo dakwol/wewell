@@ -21,6 +21,8 @@ const AuthCategory: FC = () => {
 	const userData = useSelector((state: any) => state.user)
 	const preferncesApi = new PreferencesApiRequest()
 	const { setUser } = useAuth()
+	//@ts-ignore
+	const forceUpdate = useSelector(state => state.updateReducer.forceUpdate)
 
 	const dispatch = useDispatch()
 
@@ -72,6 +74,7 @@ const AuthCategory: FC = () => {
 						Object.entries(data.user).forEach(([key, value]) => {
 							//@ts-ignore
 							dispatch(updateData({ key, value }))
+							dispatch({ type: 'SET_FORCE_UPDATE', payload: !forceUpdate })
 							//@ts-ignore
 							navigation.navigate('Home')
 						})

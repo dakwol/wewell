@@ -22,6 +22,8 @@ const Auth: FC = () => {
 	const [isError, setIsError] = useState<string>('')
 	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(true)
 	const [isErrorViseble, setIsErrorVisible] = useState<boolean>(false)
+	//@ts-ignore
+	const forceUpdate = useSelector(state => state.updateReducer.forceUpdate)
 
 	const dispatch = useDispatch()
 
@@ -46,6 +48,7 @@ const Auth: FC = () => {
 							Object.entries(data.user).forEach(([key, value]) => {
 								//@ts-ignore
 								dispatch(updateData({ key, value }))
+								dispatch({ type: 'SET_FORCE_UPDATE', payload: !forceUpdate })
 								//@ts-ignoreё
 								navigation.navigate('Home')
 							})

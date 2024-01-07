@@ -21,8 +21,6 @@ const Home: FC = () => {
 	//@ts-ignore
 	const forceUpdate = useSelector(state => state.updateReducer.forceUpdate)
 
-	console.log('isUpdate', forceUpdate)
-
 	const [showContactPicker, setShowContactPicker] = useState(false) // Manage the visibility of the ContactPicker
 
 	const [dataHistory, setDataHistory] = useState([])

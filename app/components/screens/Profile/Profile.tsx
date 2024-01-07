@@ -9,9 +9,18 @@ import userData from '@/redux/reducers/userData'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import React, { FC, Fragment, useEffect, useRef, useState } from 'react'
-import { Animated, StatusBar, Text, TouchableOpacity, View } from 'react-native'
+import {
+	Animated,
+	StatusBar,
+	Text,
+	TouchableOpacity,
+	View,
+	Image
+} from 'react-native'
 //@ts-ignore
-import Image from 'react-native-remote-svg'
+// import Image from 'react-native-remote-svg'
+import SvgImage from 'react-native-remote-svg'
+
 import { useDispatch } from 'react-redux'
 import { dateUtils } from '../../UI/functions/functions'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -220,8 +229,8 @@ const Profile: FC = () => {
 					</View>
 				</Animated.View>
 				{isLoading ? (
-					<Image
-						source={require('../../../images/WLoading.svg')}
+					<SvgImage
+						source={{ uri: 'https://svgshare.com/i/11gW.svg' }}
 						className={'w-full justify-center h-16'}
 					/>
 				) : (
@@ -241,8 +250,8 @@ const Profile: FC = () => {
 							</View>
 							{repeatUser ? (
 								<View className='bg-white rounded-2xl justify-center items-center relative h-40 w-40'>
-									<Image
-										source={require('../../../images/Icons/Crown.svg')}
+									<SvgImage
+										source={{ uri: 'https://svgshare.com/i/11iC.svg' }}
 										className={'z-50 w-16 h-14 absolute -top-1 right-2'}
 										style={{ transform: [{ rotateZ: '17deg' }] }}
 									/>
@@ -255,8 +264,8 @@ const Profile: FC = () => {
 								</View>
 							) : (
 								<View className='bg-white rounded-2xl justify-center items-center h-40 w-40'>
-									<Image
-										source={require('../../../images/Icons/Crown.svg')}
+									<SvgImage
+										source={{ uri: 'https://svgshare.com/i/11iC.svg' }}
 										className={'mb-3 w-14 h-14'}
 									/>
 									<Text className='text-xs text-gray-400 w-24 text-center'>

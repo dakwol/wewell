@@ -22,7 +22,7 @@ const HomeFirsScreen: FC = () => {
 						marginRight: 30,
 						resizeMode: 'contain'
 					}}
-					source={require('../../../images/ArrowHomeStart.svg')}
+					source={{ uri: 'https://svgshare.com/i/11gf.svg' }}
 				/>
 			</View>
 		</View>

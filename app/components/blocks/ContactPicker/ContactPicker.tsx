@@ -160,7 +160,7 @@ const ContactPicker: React.ForwardRefRenderFunction<
 
 						{isLoading ? (
 							<Image
-								source={require('../../../images/WLoading.svg')}
+								source={{ uri: 'https://svgshare.com/i/11gW.svg' }}
 								className={'w-full justify-center h-16'}
 							/>
 						) : (

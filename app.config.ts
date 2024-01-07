@@ -12,20 +12,20 @@ const config: ExpoConfig = {
     [
       'expo-media-library',
       {
-        photosPermission: 'Allow wewell to access your photos.',
-        savePhotosPermission: 'Allow wewell to save photos.',
+        photosPermission: 'Разрешите wewell получить доступ к вашим фотографиям.',
+        savePhotosPermission: 'Позволяет wewell сохранять фотографии.',
         isAccessMediaLocationEnabled: true,
       },
     ],
     [
       'expo-contacts',
       {
-        contactsPermission: 'Allow wewell to access your contacts.',
+        contactsPermission: 'Разрешите wewell олучить доступ к вашим контактам.',
       },
     ],
   ],
   splash: {
-    image: './assets/splash.png',
+    image: './assets/splash.svg',
     resizeMode: 'contain',
     backgroundColor: '#ffffff',
   },
@@ -33,14 +33,14 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     infoPlist: {
-      NSPhotoLibraryUsageDescription: 'Allow wewell to access your photos.',
-      NSPhotoLibraryAddUsageDescription: 'Allow wewell to save photos.',
-      NSContactsUsageDescription: 'Allow wewell to access your contacts.',
+      NSPhotoLibraryUsageDescription: 'Разрешите wewell получить доступ к вашим фотографиям.',
+      NSPhotoLibraryAddUsageDescription: 'Позволяет wewell сохранять фотографии.',
+      NSContactsUsageDescription: 'Разрешите wewell олучить доступ к вашим контактам.',
     },
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: './assets/adaptive-icon.png',
+      foregroundImage: './assets/icon.png',
       backgroundColor: '#ffffff',
     },
     permissions: [
@@ -56,7 +56,10 @@ const config: ExpoConfig = {
     favicon: './assets/favicon.png',
   },
   extra: {
-    mapKitApiKey: 'bla-bla-bla', // Add your Yandex Maps API key here
+    mapKitApiKey: '1f4fe73b-c132-431c-928d-3c95d9448e78', // Add your Yandex Maps API key here
+    eas: {
+      "projectId": "3368d7ef-be1f-48af-80f8-092ae1e8969a"
+    }
   },
 };
 

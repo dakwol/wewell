@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator<TypeRootrStackParamList>()
 const PrivateNavigation: FC = () => {
 	const { user } = useAuth()
 
-	const initialRouteName = user.token ? 'Home' : 'Auth'
+	const initialRouteName = user.token ? 'Home' : 'Onboarding'
 
 	return (
 		<Stack.Navigator

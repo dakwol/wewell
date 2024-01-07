@@ -1,0 +1,28 @@
+<svg width="460" height="301" viewBox="0 0 460 301" fill="none" xmlns="http://www.w3.org/2000/svg" id="animated-svg">
+    <path
+        d="M71.3701 204V98.3115H92.7568V204H71.3701ZM172.298 131.783L152.229 204H131.355L103.377 98.3115H126.302L142.928 174.85H143.514L163.289 98.3115H181.966L201.741 174.85H202.327L219.026 98.3115H241.951L213.899 204H193.025L172.957 131.783H172.298Z"
+        fill="#0038FF" class="svg-elem-1"></path>
+    <path
+        d="M287.97 131.783L267.901 204H247.027L219.049 98.3115H241.974L258.6 174.85H259.186L278.961 98.3115H297.638L317.413 174.85H317.999L334.698 98.3115H357.623L329.571 204H308.697L288.629 131.783H287.97ZM368.243 204V98.3115H389.63V204H368.243Z"
+        fill="#0038FF" class="svg-elem-2"></path>
+</svg>
+
+<style>
+    #animated-svg .svg-elem-1 {
+        fill: transparent;
+        transition: fill 0.7s cubic-bezier(0.645, 0.045, 0.355, 1) 0.8s;
+    }
+
+    #animated-svg.active .svg-elem-1 {
+        fill: rgb(0, 56, 255);
+    }
+
+    #animated-svg .svg-elem-2 {
+        fill: transparent;
+        transition: fill 0.7s cubic-bezier(0.645, 0.045, 0.355, 1) 0.9s;
+    }
+
+    #animated-svg.active .svg-elem-2 {
+        fill: rgb(0, 56, 255);
+    }
+</style>

@@ -23,6 +23,9 @@ export const API_USER_MODEL = {
         },
         getSms:{
             url: 'phone/'
+        },
+        phones:{
+            url: 'phones/'
         }
     },
 }

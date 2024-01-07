@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="450" height="450" viewBox="0 0 450 450">
+  <path d="M60 210 L150 390 L240 210 L330 390 L420 210" fill="none" stroke="#0038FF" stroke-width="18">
+    <animate attributeName="stroke-dasharray" dur="2s" repeatCount="indefinite"
+      values="0 450;450 0;0 450" keyTimes="0;0.5;1" />
+  </path>
+</svg>

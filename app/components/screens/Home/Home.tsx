@@ -9,6 +9,7 @@ import HomeFirsScreen from '@/components/blocks/homeFirsScreen/homeFirsScreen'
 import HomeScreenHistoryComponent from '@/components/blocks/homeScreenHistoryComponent/HomeScreenHistoryComponent'
 import { useAuth } from '@/hooks/useAuth'
 import MeetingApiRequest from '@/api/Meeting/Meeting'
+import { useSelector } from 'react-redux'
 
 const Home: FC = () => {
 	const scrollY = useRef(new Animated.Value(0)).current
@@ -17,6 +18,10 @@ const Home: FC = () => {
 	const meetingApi = new MeetingApiRequest()
 
 	const { user } = useAuth()
+	//@ts-ignore
+	const forceUpdate = useSelector(state => state.updateReducer.forceUpdate)
+
+	console.log('isUpdate', forceUpdate)
 
 	const [showContactPicker, setShowContactPicker] = useState(false) // Manage the visibility of the ContactPicker
 
@@ -43,27 +48,33 @@ const Home: FC = () => {
 		setShowContactPicker(!showContactPicker)
 	}
 
-	// const dataHistory = [
-	// 	{
-	// 		id: 1,
-	// 		name: 'ХУЙ',
-	// 		image: require('../../../images/AvatarUser1.png')
-	// 	}
-	// ]
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', () => {
+			setShowContactPicker(false)
+		})
 
-	console.log('====================================')
-	console.log(dataHistory)
-	console.log('====================================')
+		return unsubscribe
+	}, [navigation])
 
 	useEffect(() => {
-		meetingApi.getMeetingsUser(user.user.id).then(resp => {
-			console.log('meet', resp)
-			if (resp.success) {
-				//@ts-ignore
-				setDataHistory(resp.data)
+		const fetchMeetings = async () => {
+			try {
+				const resp = await meetingApi.getMeetingsUser(user.user.id)
+				if (resp.success) {
+					//@ts-ignore
+					setDataHistory(resp.data)
+				}
+			} catch (error) {
+				console.error('Error fetching meetings:', error)
 			}
-		})
-	}, [])
+		}
+
+		fetchMeetings()
+
+		const intervalId = setInterval(fetchMeetings, 10000)
+
+		return () => clearInterval(intervalId)
+	}, [user, forceUpdate])
 
 	return (
 		<View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -75,6 +86,7 @@ const Home: FC = () => {
 					}
 				)}
 				scrollEventThrottle={16}
+				showsVerticalScrollIndicator={false}
 			>
 				<Animated.View
 					style={{
@@ -93,7 +105,7 @@ const Home: FC = () => {
 							source={
 								user?.user?.url
 									? { uri: user?.user?.url }
-									: require('../../../images/AvatarUser1.png')
+									: require('../../../images/icon.png')
 							}
 							style={{ width: avatarSize, height: avatarSize }}
 							className={'rounded-full'}

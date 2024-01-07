@@ -1,6 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { FC, useState, useRef, useEffect } from 'react'
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { useSelector } from 'react-redux'
 
 //@ts-ignore
 type AuthSmsRouteProp = RouteProp<RootStackParamList, 'AuthSms'>
@@ -11,6 +12,7 @@ const AuthSms: FC = () => {
 
 	const route = useRoute<AuthSmsRouteProp>()
 	const { phone } = route.params
+	const phoneNumber = useSelector((state: any) => state.user.phoneNumber)
 
 	const handleCodeChange = (index: number, value: string) => {
 		const newCode = [...code]
@@ -55,8 +57,6 @@ const AuthSms: FC = () => {
 		navigation.navigate('AuthName')
 	}
 
-	console.log(phone)
-
 	return (
 		<View className='flex-1 justify-between content-center p-6'>
 			<View className='w-full mt-11'>
@@ -64,7 +64,7 @@ const AuthSms: FC = () => {
 					Введите код из SMS
 				</Text>
 				<Text className='text-center text-base'>
-					{`Код отправили на номер ${phone ? phone : ''}`}
+					{`Код отправили на номер ${phoneNumber ? phoneNumber : ''}`}
 				</Text>
 			</View>
 

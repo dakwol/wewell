@@ -1,6 +1,8 @@
 import PreferencesApiRequest from '@/api/Preferences/Preferences'
 import UserApiRequest from '@/api/User/Users'
-import { updateField } from '@/redux/actions/userActions'
+import { useAuth } from '@/hooks/useAuth'
+import { updateData, updateField } from '@/redux/actions/userActions'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import React, { FC, useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
@@ -18,12 +20,10 @@ const AuthCategory: FC = () => {
 	const [dataButton, setDataButton] = useState<iDataPreferences[]>([])
 	const userData = useSelector((state: any) => state.user)
 	const preferncesApi = new PreferencesApiRequest()
+	const { setUser } = useAuth()
 
 	const dispatch = useDispatch()
 
-	console.log('====================================')
-	console.log('userData', userData)
-	console.log('====================================')
 	useEffect(() => {
 		const lastButtonAll = {
 			id: 0,
@@ -62,10 +62,30 @@ const AuthCategory: FC = () => {
 
 	const navigationAuth = () => {
 		userApi.register(userData).then(resp => {
-			console.log(resp)
+			if (resp.success) {
+				const data = resp.data
+				console.log(data)
+				AsyncStorage.setItem('user', JSON.stringify(resp.data))
+					.then(() => {
+						console.log('user сохранён в AsyncStorage')
+						//@ts-ignore
+						Object.entries(data.user).forEach(([key, value]) => {
+							//@ts-ignore
+							dispatch(updateData({ key, value }))
+							//@ts-ignore
+							navigation.navigate('Home')
+						})
+						//@ts-ignore
+						setUser(resp.data)
+					})
+					.catch(error => {
+						console.error('Ошибка при сохранении user в AsyncStorage:', error)
+					})
+			} else {
+				//@ts-ignore
+				navigation.navigate('AuthRegistration')
+			}
 		})
-		// //@ts-ignore
-		// navigation.navigate('Home')
 	}
 
 	return (

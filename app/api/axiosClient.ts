@@ -68,7 +68,8 @@ axiosClient.interceptors.response.use(
           if (refreshedTokenResponse.data && refreshedTokenResponse.data.token) {
             // Update userToken in AsyncStorage and Axios headers
             const newAccessToken = refreshedTokenResponse.data.token;
-            const newAccessUser = { ...user, token: newAccessToken };
+            const newRefreshToken = refreshedTokenResponse.data.refreshToken;
+            const newAccessUser = { ...user, token: newAccessToken, refreshToken:newRefreshToken };
         
             await AsyncStorage.setItem('user', JSON.stringify(newAccessUser));
             axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;

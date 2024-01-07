@@ -34,16 +34,19 @@ class BaseModelAPI {
     }
 
     private returnResponse<T>(resp: AxiosResponse<T> | null): APIResponse<T> {
+        console.log('====================================');
+        console.log('resppppp', resp);
+        console.log('====================================');
         return {
             success: !!resp,
-            data: resp ? 'data' in resp ? resp.data : resp : null,
+            //@ts-ignore
+            data: resp ? resp.data ? resp.data : resp : null,
             message: resp ? 'Success' : 'No response received',
         };
     }
 
     protected async makeRequest<T>(requestFn: (url: string, config?: any) => Promise<AxiosResponse<T>>, params?: BaseModelAPIParams): Promise<APIResponse<T>> {
         const { method, id, urlParams, body } = { ...this.defaultParams, ...params };
-        console.log('resp',this.baseUrl + id + method + urlParams, body);
         try {
             const resp = await requestFn(this.baseUrl + id + method + urlParams, body);
      

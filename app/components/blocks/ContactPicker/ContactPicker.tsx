@@ -1,4 +1,3 @@
-// ContactPicker.tsx
 import React, {
 	useState,
 	useEffect,
@@ -10,6 +9,8 @@ import * as Contacts from 'expo-contacts'
 import MeetingsComponent from '../MeetingsComponent/MeetingsComponent'
 //@ts-ignore
 import Image from 'react-native-remote-svg'
+import UserApiRequest from '@/api/User/Users'
+
 export interface Contact {
 	id: string
 	name: string
@@ -27,8 +28,10 @@ const ContactPicker: React.ForwardRefRenderFunction<
 	{ onClose: () => void }
 > = (props, ref) => {
 	const [contacts, setContacts] = useState<Contact[]>([])
+	const [searchContacts, setSearchContacts] = useState<Contact[]>([])
 	const [selectedContact, setSelectedContact] = useState<Contact | null>(null)
 	const [isLoading, setIsLoading] = useState<boolean>(true)
+	const userApi = new UserApiRequest()
 
 	useEffect(() => {
 		setIsLoading(true)
@@ -45,13 +48,24 @@ const ContactPicker: React.ForwardRefRenderFunction<
 				})
 
 				if (data) {
-					const formattedContacts = data.map(contact => ({
-						id: contact.id,
-						name: contact.name ?? 'Unknown',
-						image: contact.image ? contact.image.uri : undefined,
-						phoneNumbers: contact.phoneNumbers
-					}))
-					//@ts-ignore
+					const uniquePhoneNumbers = new Set<string>()
+					const formattedContacts = data.reduce((acc: Contact[], contact) => {
+						if (contact.phoneNumbers) {
+							contact.phoneNumbers.forEach(phoneNumber => {
+								const formattedNumber = formatPhoneNumber(phoneNumber.number)
+								if (!uniquePhoneNumbers.has(formattedNumber)) {
+									uniquePhoneNumbers.add(formattedNumber)
+									acc.push({
+										id: contact.id,
+										name: contact.name ?? 'Unknown',
+										image: contact.image ? contact.image.uri : undefined,
+										phoneNumbers: [{ number: formattedNumber }]
+									})
+								}
+							})
+						}
+						return acc
+					}, [])
 					setContacts(formattedContacts)
 					setIsLoading(false)
 				}
@@ -61,38 +75,68 @@ const ContactPicker: React.ForwardRefRenderFunction<
 		requestContacts()
 	}, [])
 
-	const pickContact = async () => {
-		const { status } = await Contacts.requestPermissionsAsync()
-		if (status === 'granted') {
-			const { data } = await Contacts.getContactsAsync({
-				fields: [
-					Contacts.Fields.ID,
-					Contacts.Fields.Name,
-					Contacts.Fields.Image,
-					Contacts.Fields.PhoneNumbers
-				]
-			})
+	useEffect(() => {
+		const formattedPhoneNumbers = Array.from(
+			new Set(
+				contacts.flatMap(item =>
+					item.phoneNumbers
+						? item.phoneNumbers.map(phoneNumber =>
+								formatPhoneNumber(phoneNumber.number)
+						  )
+						: []
+				)
+			)
+		)
 
-			if (data && data.length > 0) {
-				const contact = data[0]
-				setSelectedContact({
-					id: contact.id,
-					name: contact.name ?? 'Unknown',
-					image: contact.image ? contact.image.uri : undefined,
-					//@ts-ignore
-					phoneNumbers: contact.phoneNumbers
-				})
-			}
+		if (formattedPhoneNumbers.length !== 0) {
+			userApi.phones(formattedPhoneNumbers).then(resp => {
+				//@ts-ignore
+				setSearchContacts(resp.data)
+			})
 		}
+	}, [contacts])
+
+	const pickContact = (item: any) => {
+		// const { status } = await Contacts.requestPermissionsAsync()
+		// if (status === 'granted') {
+		// 	const { data } = await Contacts.getContactsAsync({
+		// 		fields: [
+		// 			Contacts.Fields.ID,
+		// 			Contacts.Fields.Name,
+		// 			Contacts.Fields.Image,
+		// 			Contacts.Fields.PhoneNumbers
+		// 		]
+		// 	})
+
+		// 	if (data && data.length > 0) {
+		// 		const contact = data[0]
+		setSelectedContact({
+			id: item.id,
+			name: item.name ?? 'Unknown',
+			image: item.image ? item.image.uri : undefined,
+			//@ts-ignore
+			phoneNumbers: item.phoneNumbers
+		})
+		console.log('====================================')
+		console.log('pic', item)
+		console.log('====================================')
+		// 	}
+		// }
 	}
 
-	useImperativeHandle(ref, () => ({
-		pickContact,
-		onClose: props.onClose
-	}))
+	// useImperativeHandle(ref, () => ({
+	// 	pickContact,
+	// 	onClose: props.onClose
+	// }))
 
-	console.log(contacts)
-	console.log(selectedContact)
+	const formatPhoneNumber = (phoneNumber: any) => {
+		const numericOnly = phoneNumber.replace(/\D/g, '')
+		const formattedNumber = numericOnly.replace(
+			/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/,
+			'+$1 $2 $3-$4-$5'
+		)
+		return formattedNumber
+	}
 
 	return (
 		<>
@@ -113,36 +157,51 @@ const ContactPicker: React.ForwardRefRenderFunction<
 								<Text>Отменить</Text>
 							</TouchableOpacity>
 						</View>
+
 						{isLoading ? (
 							<Image
-								source={require('../../../images/Icons/loading.svg')}
-								className={'w-full justify-center h-7'}
+								source={require('../../../images/WLoading.svg')}
+								className={'w-full justify-center h-16'}
 							/>
 						) : (
 							<ScrollView>
-								{contacts ? (
+								<Text className='text-center w-full text-xs'>
+									Твои друзья уже в wewell!
+								</Text>
+								{contacts && Array.isArray(searchContacts) ? (
 									contacts.map(item => {
-										return (
-											<TouchableOpacity
-												className='border-b-2 pt-2 pb-2 flex-row items-center'
-												onPress={() => {}}
-											>
-												<Image
-													source={
-														item.image
-															? { uri: item.image }
-															: require('../../../images/defaultSource.png')
-													}
-													className='w-12 h-12 rounded-full mr-3'
-												/>
-												<View>
-													<Text>{item.name}</Text>
-													{item.phoneNumbers && (
-														<Text>{item.phoneNumbers[0]?.number}</Text>
-													)}
-												</View>
-											</TouchableOpacity>
-										)
+										// Ensure that item.phoneNumbers is defined and has at least one element
+										if (item.phoneNumbers && item.phoneNumbers.length > 0) {
+											const formattedPhoneNumber = formatPhoneNumber(
+												item.phoneNumbers[0]?.number
+											)
+
+											return (
+												searchContacts.includes(formattedPhoneNumber) && (
+													<TouchableOpacity
+														key={item.id} // Add a unique key for each mapped element
+														className={`border-b-2 border-gray-100 pt-2 pb-2 flex-row items-center`}
+														onPress={() => pickContact(item)}
+													>
+														<Image
+															source={
+																item.image
+																	? { uri: item.image }
+																	: require('../../../images/defaultSource.png')
+															}
+															className='w-12 h-12 rounded-full mr-3'
+														/>
+														<View>
+															<Text>{item.name}</Text>
+															<Text>{formattedPhoneNumber}</Text>
+														</View>
+													</TouchableOpacity>
+												)
+											)
+										} else {
+											// Handle the case where phoneNumbers is undefined or empty
+											return null
+										}
 									})
 								) : (
 									<Text className='text-gray-400 text-center'>
@@ -154,7 +213,10 @@ const ContactPicker: React.ForwardRefRenderFunction<
 					</View>
 				</View>
 			) : (
-				<MeetingsComponent />
+				<MeetingsComponent
+					selectedContact={selectedContact}
+					onClose={() => setSelectedContact(null)}
+				/>
 			)}
 		</>
 	)

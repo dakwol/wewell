@@ -7,6 +7,9 @@ import { IRoute } from "./navigation.types";
 import AuthSms from "@/components/screens/AuthSMS/AuthSMS";
 import AuthName from "@/components/screens/AuthName/AuthName";
 import AuthCategory from "@/components/screens/AuthCategory/AuthCategory";
+import Transition from "@/components/screens/TransitionScreen/TranstitionScreen";
+import ProfileMeeting from "@/components/screens/ProfileMeeting/ProfileMeeting";
+import AuthRegistration from "@/components/screens/AuthRegistration/AuthRegistration";
 
 export const routes: IRoute[] = [
     {
@@ -16,6 +19,10 @@ export const routes: IRoute[] = [
     {
         name: "Auth",
         component: Auth
+    },
+    {
+        name: "AuthRegistration",
+        component: AuthRegistration
     },
     {
         name: "AuthSms",
@@ -40,5 +47,9 @@ export const routes: IRoute[] = [
     {
         name: "Profile",
         component: Profile
+    },
+    {
+        name: "ProfileMeeting",
+        component: ProfileMeeting
     },
 ]

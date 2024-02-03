@@ -41,7 +41,9 @@
         "NSPhotoLibraryUsageDescription": "Разрешите wewell получить доступ к вашим фотографиям.",
         "NSPhotoLibraryAddUsageDescription": "Позволяет wewell сохранять фотографии.",
         "NSContactsUsageDescription": "Разрешите wewell олучить доступ к вашим контактам."
-      }
+      },
+      "buildIdentifier":"com.wewell.wewell",
+      "buildNumber":"1.0.0"
     },
     "android": {
       "adaptiveIcon": {

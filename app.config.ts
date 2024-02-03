@@ -37,6 +37,7 @@ const config: ExpoConfig = {
       NSPhotoLibraryAddUsageDescription: 'Позволяет wewell сохранять фотографии.',
       NSContactsUsageDescription: 'Разрешите wewell олучить доступ к вашим контактам.',
     },
+    bundleIdentifier: "wewell.com"
   },
   android: {
     adaptiveIcon: {

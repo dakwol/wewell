@@ -42,7 +42,7 @@
         "NSPhotoLibraryAddUsageDescription": "Позволяет wewell сохранять фотографии.",
         "NSContactsUsageDescription": "Разрешите wewell олучить доступ к вашим контактам."
       },
-      "buildIdentifier":"com.wewell.wewell",
+      "buildIdentifier":"com.name.wewell",
       "buildNumber":"1.0.0"
     },
     "android": {
